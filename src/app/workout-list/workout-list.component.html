@@ -1,0 +1,49 @@
+<div style="margin-top: 32px;"></div>
+
+
+<div style="margin-left: 8px;">
+    <mat-form-field>
+      <mat-label>Search by Name</mat-label>
+      <input matInput (keyup)="applyFilter($event)">
+    </mat-form-field>
+  
+    <mat-form-field style="margin-left: 16px;">
+      <mat-label>Filter by Workout Type</mat-label>
+      <mat-select (selectionChange)="applyFilter($event)">
+        <mat-option *ngFor="let type of workoutTypes" [value]="type">{{ type }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let user"> {{user.name}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="workouts">
+      <th mat-header-cell *matHeaderCellDef> Workouts </th>
+      <td mat-cell *matCellDef="let user">
+          {{combineWorkoutTypes(user.workouts) }}
+      </td>
+    </ng-container>
+ 
+    <ng-container matColumnDef="workoutsNumber">
+      <th mat-header-cell *matHeaderCellDef> No of Workouts </th>
+      <td mat-cell *matCellDef="let user"> {{user.workouts.length}}      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalWorkoutLength">
+      <th mat-header-cell *matHeaderCellDef> Total Workout Minutes </th>
+      <td mat-cell *matCellDef="let user">
+          {{ calculateTotalMinutes(user.workouts) }} minutes
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+  <mat-paginator [length]="dataSource.data.length" [pageSize]="5"></mat-paginator>
+  
